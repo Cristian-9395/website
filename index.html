@@ -1,0 +1,2172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>W2L Websites</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #050814;
+      --bg-alt: #0b1020;
+      --card: #0f1528;
+      --accent: #1e90ff;
+      --accent-soft: rgba(30, 144, 255, 0.15);
+      --text: #f5f7ff;
+      --muted: #a0a4c0;
+      --border: #1a2138;
+      --radius: 10px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #151a3a 0, #050814 55%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+    @media (max-width: 720px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+      }
+    }
+
+    .topbar {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(
+        to right,
+        rgba(11, 16, 32, 0.96),
+        rgba(5, 8, 20, 0.98)
+      );
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .sidebar-toggle {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at 30% 20%, #4fd1ff, #1e90ff 40%, #050814 100%);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 0 12px rgba(30, 144, 255, 0.6);
+    }
+
+    .logo-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 20%, #4fd1ff, #1e90ff 40%, #050814 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 0 18px rgba(30, 144, 255, 0.7);
+    }
+
+    .logo-mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 18px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .topbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-ghost,
+    .btn-primary,
+    .btn-icon {
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      font-size: 13px;
+      background: rgba(10, 16, 35, 0.9);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1e90ff, #4fd1ff);
+      border-color: transparent;
+      color: #050814;
+      font-weight: 600;
+      box-shadow: 0 0 18px rgba(30, 144, 255, 0.7);
+    }
+
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      justify-content: center;
+      padding: 0;
+    }
+
+/* SIDEBAR — hidden by default, slides in when opened */
+.sidebar {
+  position: fixed;
+  top: 56px;
+  bottom: 0;
+  left: 0;
+  width: 220px;
+  background: var(--bg-alt);
+  border-right: 1px solid var(--border);
+  padding: 16px 10px;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 100;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+/* Desktop: still hidden unless opened */
+@media (min-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+}
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin: 6px 6px 4px;
+    }
+
+    .nav-btn {
+      border-radius: 8px;
+      border: none;
+      padding: 8px 10px;
+      background: transparent;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      text-align: left;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-btn span.icon {
+      width: 22px;
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    .nav-btn.active,
+    .nav-btn:hover {
+      background: var(--accent-soft);
+      color: #e7f3ff;
+    }
+
+    .sidebar-footer {
+      position: absolute;
+      bottom: 12px;
+      left: 10px;
+      right: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+
+.main {
+  padding: 18px 20px 24px;
+  margin-top: 56px; /* pushes content below topbar */
+}
+
+    @media (max-width: 720px) {
+      .main {
+        padding-top: 14px;
+      }
+    }
+
+    .page {
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .page.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .page-header {
+      margin-bottom: 18px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .page-title {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .page-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .home-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.4fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 960px) {
+      .home-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top left, #1e90ff22, #050814 55%);
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(79, 209, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+      min-height: 260px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 720px) {
+      .hero-card {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .hero-image-wrapper {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(79, 209, 255, 0.4);
+      box-shadow: 0 0 25px rgba(79, 209, 255, 0.5);
+      position: relative;
+      min-height: 220px;
+    }
+
+    .hero-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.9);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(5, 8, 20, 0.8),
+        rgba(5, 8, 20, 0.2)
+      );
+    }
+
+    .hero-arrows {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      pointer-events: none;
+    }
+
+    .hero-arrow-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 0, 0, 0.6);
+      background: rgba(5, 8, 20, 0.85);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.8);
+    }
+
+    .hero-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .hero-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .hero-dot.active {
+      background: #4fd1ff;
+      box-shadow: 0 0 10px rgba(79, 209, 255, 0.9);
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .hero-kicker {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #4fd1ff;
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .hero-desc {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .home-features {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    .feature-thumb {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(79, 209, 255, 0.4);
+      flex-shrink: 0;
+    }
+
+    .feature-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .feature-body {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .feature-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .feature-link {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #4fd1ff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .menu-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      min-height: 150px;
+    }
+
+    .menu-card-title {
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .menu-card-desc {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .menu-card a {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #4fd1ff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+      gap: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .about-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .about-main {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .about-main-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .about-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .about-thumb {
+      height: 100px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .about-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .faq-item {
+      background: var(--card);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 10px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .faq-answer {
+      padding: 0 12px 10px;
+      font-size: 13px;
+      color: var(--muted);
+      display: none;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    .tutorial-columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 960px) {
+      .tutorial-columns {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .tutorial-columns {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .tutorial-column {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 12px;
+      box-shadow: var(--shadow-soft);
+      font-size: 13px;
+    }
+
+    .tutorial-column-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .tutorial-item {
+      margin-bottom: 8px;
+    }
+
+    .tutorial-item-title {
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .tutorial-item-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .tutorial-link {
+      font-size: 12px;
+      color: #4fd1ff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .tutorial-single {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .tutorial-text {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .tutorial-video {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(79, 209, 255, 0.5);
+      margin: 10px 0 14px;
+      box-shadow: 0 0 18px rgba(79, 209, 255, 0.5);
+    }
+
+    .tutorial-video iframe {
+      width: 100%;
+      height: 260px;
+      border: 0;
+      display: block;
+    }
+
+    .references-menu {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 14px;
+      box-shadow: var(--shadow-soft);
+      max-width: 480px;
+    }
+
+    .ref-link {
+      display: block;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .ref-link:hover {
+      background: var(--accent-soft);
+    }
+
+    .ref-grid {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 14px;
+    }
+
+    .ref-grid-title {
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .ref-grid-intro {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .ref-grid-table {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 720px) {
+      .ref-grid-table {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .auth-wrapper {
+      max-width: 420px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 18px 16px 20px;
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+    }
+
+    .auth-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      margin: 0 auto 10px;
+      background: radial-gradient(circle at 30% 20%, #4fd1ff, #1e90ff 40%, #050814 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      box-shadow: 0 0 18px rgba(30, 144, 255, 0.7);
+    }
+
+    .auth-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .auth-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .auth-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    .auth-form label {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #050814;
+      color: var(--text);
+    }
+
+    .auth-actions {
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .auth-footer-link {
+      font-size: 12px;
+      color: #4fd1ff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .footer {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--border);
+      padding: 8px 18px;
+      font-size: 11px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(5, 8, 20, 0.96);
+    }
+
+    .footer-links span {
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    .footer-links span:hover {
+      color: #4fd1ff;
+    }
+
+    .settings-panel-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .settings-panel-backdrop.open {
+      display: flex;
+    }
+
+    .settings-panel {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      width: 320px;
+      box-shadow: var(--shadow-soft);
+      font-size: 13px;
+    }
+
+    .settings-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .settings-panel-title {
+      font-weight: 600;
+    }
+
+    .settings-row {
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .settings-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .settings-nav {
+      margin-top: 10px;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+    }
+
+    .settings-nav-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .settings-link {
+      display: block;
+      padding: 6px 0;
+      font-size: 13px;
+      cursor: pointer;
+      color: #e7f3ff;
+    }
+
+    .settings-link:hover {
+      color: #4fd1ff;
+    }
+
+    .legal-page {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      box-shadow: var(--shadow-soft);
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .legal-page h2 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .legal-page h3 {
+      font-size: 14px;
+      margin-top: 10px;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-title">Main</div>
+        <button class="nav-btn active" data-page="home">
+          <span class="icon">🏠</span><span class="label">Home</span>
+        </button>
+        <button class="nav-btn" data-page="tutorials">
+          <span class="icon">🎓</span><span class="label">Tutorials</span>
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <div>All rights reserved</div>
+        <div>© W2L</div>
+      </div>
+    </aside>
+
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+        <div class="logo-mark">
+          <img src="assets/images/logo_w2l.png" alt="W2L Logo" />
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">W2L Websites</span>
+          <span class="brand-sub">Learn · Build · Launch</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-ghost" data-page="signup">Register</button>
+        <button class="btn-primary" data-page="login">Login</button>
+        <button class="btn-icon" id="settingsBtn">⚙</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- HOME -->
+      <section class="page active" id="page-home">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Welcome to W2L Websites</div>
+            <div class="page-subtitle">
+              A structured learning platform for modern web development.
+            </div>
+          </div>
+        </div>
+
+        <div class="home-grid">
+          <div class="hero-card">
+            <div class="hero-image-wrapper">
+              <img id="heroImage" src="assets/images/hero_main.jpg" alt="Hero" />
+              <div class="hero-overlay"></div>
+              <div class="hero-arrows">
+                <button class="hero-arrow-btn" id="heroPrev">&lt;</button>
+                <button class="hero-arrow-btn" id="heroNext">&gt;</button>
+              </div>
+            </div>
+            <div>
+              <div class="hero-text">
+                <div class="hero-kicker" id="heroKicker">Start here</div>
+                <div class="hero-title" id="heroTitle">
+                  Your website starts here
+                </div>
+                <div class="hero-desc" id="heroDesc">
+                  Learn how to plan, design and build a complete website from scratch, using the same structure as real platforms.
+                </div>
+                <div class="hero-actions">
+                  <button class="btn-primary" data-page="tutorials">
+                    View tutorials
+                  </button>
+                  <button class="btn-ghost" data-page="references">
+                    Open references
+                  </button>
+                </div>
+              </div>
+              <div class="hero-dots">
+                <div class="hero-dot active" data-idx="0"></div>
+                <div class="hero-dot" data-idx="1"></div>
+                <div class="hero-dot" data-idx="2"></div>
+                <div class="hero-dot" data-idx="3"></div>
+                <div class="hero-dot" data-idx="4"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="home-features">
+            <div class="feature-card">
+              <div class="feature-thumb">
+                <img src="assets/images/feature_1.jpg" alt="Learn to code" />
+              </div>
+              <div class="feature-body">
+                <div class="feature-title">Learn to Code</div>
+                <div>
+                  Follow a clear path from HTML and CSS to JavaScript and basic backend concepts. Each tutorial is focused and practical.
+                </div>
+                <div class="feature-link" data-page="tutorials">
+                  Go to tutorials →
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-thumb">
+                <img src="assets/images/feature_2.jpg" alt="Design your website" />
+              </div>
+              <div class="feature-body">
+                <div class="feature-title">Design Your Website</div>
+                <div>
+                  Understand layout, spacing, and typography so your pages look clean and professional on desktop and mobile.
+                </div>
+                <div class="feature-link" data-page="references">
+                  Open design references →
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-thumb">
+                <img src="assets/images/feature_3.jpg" alt="Launch your website" />
+              </div>
+              <div class="feature-body">
+                <div class="feature-title">Launch Your Website</div>
+                <div>
+                  Learn the basic steps to move from a local project to a live website that others can visit.
+                </div>
+                <div class="feature-link" data-page="tutorials">
+                  View launch tutorials →
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <div class="feature-thumb">
+                <img src="assets/images/feature_4.jpg" alt="Grow your skills" />
+              </div>
+              <div class="feature-body">
+                <div class="feature-title">Grow Your Skills</div>
+                <div>
+                  Use the reference sections and FAQ as a quick “cheat sheet” while you build your own projects.
+                </div>
+                <div class="feature-link" data-page="faq">
+                  Read FAQ and tips →
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAIN MENU -->
+      <section class="page" id="page-menu">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Main Menu</div>
+            <div class="page-subtitle">
+              Central hub to access all sections of W2L Websites.
+            </div>
+          </div>
+        </div>
+        <div class="menu-grid">
+          <div class="menu-card">
+            <div class="menu-card-title">Tutorials</div>
+            <div class="menu-card-desc">
+              Step-by-step lessons grouped by topic: HTML/CSS, JavaScript and basic database concepts.
+            </div>
+            <a data-page="tutorials">Browse tutorials →</a>
+          </div>
+          <div class="menu-card">
+            <div class="menu-card-title">References</div>
+            <div class="menu-card-desc">
+              HTML, CSS, JavaScript, MySQL and script references in a structured layout, similar to documentation.
+            </div>
+            <a data-page="references">Open references →</a>
+          </div>
+          <div class="menu-card">
+            <div class="menu-card-title">About us</div>
+            <div class="menu-card-desc">
+              Learn why this project was created and how it is organised as a learning platform.
+            </div>
+            <a data-page="about">Read about us →</a>
+          </div>
+          <div class="menu-card">
+            <div class="menu-card-title">FAQ</div>
+            <div class="menu-card-desc">
+              A page of frequently asked questions that students might have when using this site.
+            </div>
+            <a data-page="faq">View FAQ →</a>
+          </div>
+          <div class="menu-card">
+            <div class="menu-card-title">Sign up / Log in</div>
+            <div class="menu-card-desc">
+              Simulated authentication pages to show how a real platform would handle accounts.
+            </div>
+            <a data-page="signup">Go to sign up →</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="page" id="page-about">
+        <div class="page-header">
+          <div>
+            <div class="page-title">About us</div>
+            <div class="page-subtitle">
+              A college project designed as a realistic learning platform.
+            </div>
+          </div>
+          <button class="btn-ghost" data-page="menu">← Back to main menu</button>
+        </div>
+        <div class="about-layout">
+          <div class="about-main">
+            <div class="about-main-text">
+              W2L Websites was created as a structured college project to
+              demonstrate how a real educational platform could look and feel.
+              The idea is to go beyond a simple static page and show a complete
+              environment: a home page, tutorials, references, FAQ, and
+              simulated authentication.
+              <br /><br />
+              The design follows a dark, modern style with clear sections and
+              consistent components. Each page has a specific purpose: the home
+              page introduces the platform, the tutorials page simulates video
+              lessons, and the references pages act like quick documentation.
+              <br /><br />
+              All of this is built in a single HTML file for easier review, but
+              the structure is similar to what you would find in a multi-page
+              application. This makes it ideal for a college project because it
+              shows layout, navigation, interactivity, and content organisation
+              in one place.
+            </div>
+          </div>
+          <div class="about-gallery">
+            <div class="about-thumb">
+              <img src="assets/images/hero_main.jpg" alt="Hero preview" />
+            </div>
+            <div class="about-thumb">
+              <img src="assets/images/feature_1.jpg" alt="Learn to code" />
+            </div>
+            <div class="about-thumb">
+              <img src="assets/images/feature_2.jpg" alt="Design" />
+            </div>
+            <div class="about-thumb">
+              <img src="assets/images/feature_3.jpg" alt="Launch" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="page" id="page-faq">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Frequently Asked Questions</div>
+            <div class="page-subtitle">
+              A page of questions that could realistically appear for students using this platform.
+            </div>
+          </div>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Do I need any experience before using W2L Websites?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer">
+              No. The platform is designed so that you can start from zero. The first tutorials explain what HTML and CSS are, and how a basic page is structured. You can then move gradually into JavaScript and database concepts.
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Is this a real online platform or a college project?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer">
+              This is a college project that imitates a real online learning platform. The goal is to show how such a system could be organised: navigation, tutorials, references, FAQ, and account pages, all in one consistent design.
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Can I actually log in and save progress?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer">
+              The sign up and log in pages are front-end mockups. They are included to demonstrate how forms and authentication screens would look, but they are not connected to a real backend in this version.
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Where can I find quick syntax reminders?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer">
+              The References section is designed exactly for that. You can open HTML, CSS, JavaScript, MySQL and script references and quickly scan through the most important elements, properties and commands.
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">
+              <span>Can this project be extended in the future?</span>
+              <span>+</span>
+            </div>
+            <div class="faq-answer">
+              Yes. The structure is ready to be expanded with more tutorials, more detailed reference pages, and a real backend if needed. It can grow from a college project into a more advanced portfolio piece.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TUTORIALS LIST -->
+      <section class="page" id="page-tutorials">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Tutorials</div>
+            <div class="page-subtitle">
+              Choose a tutorial to open a dedicated page with an embedded video and detailed explanation.
+            </div>
+          </div>
+        </div>
+        <div class="tutorial-columns">
+          <div class="tutorial-column">
+            <div class="tutorial-column-title">HTML &amp; CSS</div>
+
+            <div class="tutorial-item">
+              <div class="tutorial-item-title">Intro to HTML</div>
+              <div class="tutorial-item-desc">
+                Learn the basic structure of a web page and the most common tags.
+              </div>
+              <span class="tutorial-link" data-tutorial="Intro to HTML">
+                Open tutorial →
+              </span>
+            </div>
+
+            <div class="tutorial-item">
+              <div class="tutorial-item-title">Basic CSS Layouts</div>
+              <div class="tutorial-item-desc">
+                Understand how to position elements using display, margin and padding.
+              </div>
+              <span class="tutorial-link" data-tutorial="Basic CSS Layouts">
+                Open tutorial →
+              </span>
+            </div>
+
+            <div class="tutorial-item">
+              <div class="tutorial-item-title">Responsive Design</div>
+              <div class="tutorial-item-desc">
+                Make your pages adapt to different screen sizes using media queries.
+              </div>
+              <span class="tutorial-link" data-tutorial="Responsive Design">
+                Open tutorial →
+              </span>
+            </div>
+          </div>
+
+          <div class="tutorial-column">
+            <div class="tutorial-column-title">JavaScript</div>
+
+            <div class="tutorial-item">
+              <div class="tutorial-item-title">JavaScript Basics</div>
+              <div class="tutorial-item-desc">
+                Variables, data types, and simple operations to control logic in your pages.
+              </div>
+              <span class="tutorial-link" data-tutorial="JavaScript Basics">
+                Open tutorial →
+              </span>
+            </div>
+
+            <div class="tutorial-item">
+              <div class="tutorial-item-title">DOM Manipulation</div>
+              <div class="tutorial-item-desc">
+                Learn how to select elements and change the content dynamically.
+              </div>
+              <span class="tutorial-link" data-tutorial="DOM Manipulation">
+                Open tutorial →
+              </span>
+            </div>
+
+            <div class="tutorial-item">
+              <div class="tutorial-item-title">Events &amp; Forms</div>
+              <div class="tutorial-item-desc">
+                React to user actions like clicks and form submissions.
+              </div>
+              <span class="tutorial-link" data-tutorial="Events & Forms">
+                Open tutorial →
+              </span>
+            </div>
+          </div>
+
+          <div class="tutorial-column">
+            <div class="tutorial-column-title">Database / Backend</div>
+
+            <div class="tutorial-item">
+              <div class="tutorial-item-title">Intro to MySQL</div>
+              <div class="tutorial-item-desc">
+                See how data is stored in tables and how queries work.
+              </div>
+              <span class="tutorial-link" data-tutorial="Intro to MySQL">
+                Open tutorial →
+              </span>
+            </div>
+
+            <div class="tutorial-item">
+              <div class="tutorial-item-title">Basic Queries</div>
+              <div class="tutorial-item-desc">
+                Learn SELECT, INSERT, UPDATE and DELETE with simple examples.
+              </div>
+              <span class="tutorial-link" data-tutorial="Basic Queries">
+                Open tutorial →
+              </span>
+            </div>
+
+            <div class="tutorial-item">
+              <div class="tutorial-item-title">Connecting to Backend</div>
+              <div class="tutorial-item-desc">
+                Understand the idea of connecting a website to a database.
+              </div>
+              <span class="tutorial-link" data-tutorial="Connecting to Backend">
+                Open tutorial →
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SINGLE TUTORIAL -->
+      <section class="page" id="page-tutorial-single">
+        <div class="page-header">
+          <div>
+            <div class="page-title" id="tutorialTitle">Tutorial</div>
+            <div class="page-subtitle" id="tutorialSubtitle">
+              Video-based tutorial with supporting explanation.
+            </div>
+          </div>
+          <button class="btn-ghost" data-page="tutorials">← Back to tutorials</button>
+        </div>
+        <div class="tutorial-single">
+          <div class="tutorial-text" id="tutorialIntro">
+            This section represents an individual tutorial page. It explains the
+            topic in more detail and simulates how a real learning platform
+            would present a lesson.
+          </div>
+          <div class="tutorial-video">
+            <!-- Replace src with your own YouTube links if you want -->
+            <iframe
+              id="tutorialVideo"
+              src="https://www.youtube.com/embed/dD2EISBDjWM"
+              title="Tutorial video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="tutorial-text" id="tutorialDetails">
+            Below the video, you can add notes, code snippets, and step-by-step
+            explanations. This text changes depending on which tutorial you
+            opened, so each lesson feels specific and not generic.
+          </div>
+        </div>
+      </section>
+
+      <!-- REFERENCES HUB -->
+      <section class="page" id="page-references">
+        <div class="page-header">
+          <div>
+            <div class="page-title">References</div>
+            <div class="page-subtitle">
+              Quick access to HTML, CSS, JavaScript, MySQL and script references.
+            </div>
+          </div>
+        </div>
+        <div class="references-menu">
+          <div class="ref-link" data-page="ref-html">HTML Reference</div>
+          <div class="ref-link" data-page="ref-css">CSS Reference</div>
+          <div class="ref-link" data-page="ref-js">JavaScript Reference</div>
+          <div class="ref-link" data-page="ref-mysql">MySQL Reference</div>
+          <div class="ref-link" data-page="ref-script">Script Reference</div>
+        </div>
+      </section>
+
+      <!-- HTML REF -->
+      <section class="page" id="page-ref-html">
+        <div class="page-header">
+          <div>
+            <div class="page-title">HTML References</div>
+            <div class="page-subtitle">
+              Common HTML tags and attributes with a quick overview.
+            </div>
+          </div>
+          <button class="btn-ghost" data-page="references">← Back to references</button>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">HTML Elements</div>
+          <div class="ref-grid-intro">
+            Use this section as a quick reminder of the most important HTML
+            elements you will use when building pages.
+          </div>
+          <div class="ref-grid-table">
+            <div>&lt;html&gt; – root element</div>
+            <div>&lt;head&gt; – metadata</div>
+            <div>&lt;body&gt; – visible content</div>
+            <div>&lt;h1&gt;–&lt;h6&gt; – headings</div>
+            <div>&lt;p&gt; – paragraph</div>
+            <div>&lt;a&gt; – link</div>
+            <div>&lt;img&gt; – image</div>
+            <div>&lt;div&gt; – block container</div>
+            <div>&lt;span&gt; – inline container</div>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">Basic Page Structure</div>
+          <div class="ref-grid-intro">
+            A typical HTML page includes a head section with metadata and a body
+            section with the visible content.
+          </div>
+          <div class="ref-grid-table">
+            <div>&lt;title&gt; – page title</div>
+            <div>&lt;meta&gt; – description, charset</div>
+            <div>&lt;link&gt; – stylesheets</div>
+            <div>&lt;header&gt; – top section</div>
+            <div>&lt;main&gt; – main content</div>
+            <div>&lt;footer&gt; – bottom section</div>
+            <div>&lt;nav&gt; – navigation</div>
+            <div>&lt;section&gt; – grouped content</div>
+            <div>&lt;article&gt; – independent content</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CSS REF -->
+      <section class="page" id="page-ref-css">
+        <div class="page-header">
+          <div>
+            <div class="page-title">CSS References</div>
+            <div class="page-subtitle">
+              Common CSS properties and layout concepts.
+            </div>
+          </div>
+          <button class="btn-ghost" data-page="references">← Back to references</button>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">Core Properties</div>
+          <div class="ref-grid-intro">
+            These properties are used constantly when styling pages. Knowing
+            them well makes layout work much easier.
+          </div>
+          <div class="ref-grid-table">
+            <div>color</div>
+            <div>background</div>
+            <div>margin</div>
+            <div>padding</div>
+            <div>border</div>
+            <div>font-size</div>
+            <div>font-weight</div>
+            <div>line-height</div>
+            <div>text-align</div>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">Layout</div>
+          <div class="ref-grid-intro">
+            Layout properties control how elements are positioned on the page.
+          </div>
+          <div class="ref-grid-table">
+            <div>display</div>
+            <div>flex</div>
+            <div>grid</div>
+            <div>position</div>
+            <div>top / right / bottom / left</div>
+            <div>z-index</div>
+            <div>width / height</div>
+            <div>max-width</div>
+            <div>overflow</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- JS REF -->
+      <section class="page" id="page-ref-js">
+        <div class="page-header">
+          <div>
+            <div class="page-title">JavaScript References</div>
+            <div class="page-subtitle">
+              Basic JavaScript concepts and methods.
+            </div>
+          </div>
+          <button class="btn-ghost" data-page="references">← Back to references</button>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">Language Basics</div>
+          <div class="ref-grid-intro">
+            JavaScript adds behaviour to your pages. These concepts appear in
+            almost every script you write.
+          </div>
+          <div class="ref-grid-table">
+            <div>let / const</div>
+            <div>functions</div>
+            <div>arrays</div>
+            <div>objects</div>
+            <div>if / else</div>
+            <div>for / while loops</div>
+            <div>JSON</div>
+            <div>console.log</div>
+            <div>Math</div>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">DOM &amp; Events</div>
+          <div class="ref-grid-intro">
+            These methods are used to interact with the page and respond to user
+            actions.
+          </div>
+          <div class="ref-grid-table">
+            <div>document.querySelector</div>
+            <div>document.querySelectorAll</div>
+            <div>addEventListener</div>
+            <div>innerText / innerHTML</div>
+            <div>classList.add / remove</div>
+            <div>style.property</div>
+            <div>setTimeout</div>
+            <div>setInterval</div>
+            <div>fetch</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MYSQL REF -->
+      <section class="page" id="page-ref-mysql">
+        <div class="page-header">
+          <div>
+            <div class="page-title">MySQL References</div>
+            <div class="page-subtitle">
+              Basic SQL commands and concepts.
+            </div>
+          </div>
+          <button class="btn-ghost" data-page="references">← Back to references</button>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">Core Commands</div>
+          <div class="ref-grid-intro">
+            These commands are the foundation of working with relational
+            databases like MySQL.
+          </div>
+          <div class="ref-grid-table">
+            <div>SELECT</div>
+            <div>INSERT</div>
+            <div>UPDATE</div>
+            <div>DELETE</div>
+            <div>WHERE</div>
+            <div>JOIN</div>
+            <div>ORDER BY</div>
+            <div>GROUP BY</div>
+            <div>LIMIT</div>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">Table Design</div>
+          <div class="ref-grid-intro">
+            Understanding how tables are structured helps you design better
+            databases.
+          </div>
+          <div class="ref-grid-table">
+            <div>PRIMARY KEY</div>
+            <div>FOREIGN KEY</div>
+            <div>AUTO_INCREMENT</div>
+            <div>NOT NULL</div>
+            <div>UNIQUE</div>
+            <div>INDEX</div>
+            <div>VARCHAR</div>
+            <div>INT</div>
+            <div>DATE / DATETIME</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCRIPT REF -->
+      <section class="page" id="page-ref-script">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Script References</div>
+            <div class="page-subtitle">
+              General scripting concepts and utilities.
+            </div>
+          </div>
+          <button class="btn-ghost" data-page="references">← Back to references</button>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">Core Concepts</div>
+          <div class="ref-grid-intro">
+            These ideas apply to many scripting languages, not just JavaScript.
+          </div>
+          <div class="ref-grid-table">
+            <div>Variables</div>
+            <div>Conditions</div>
+            <div>Loops</div>
+            <div>Functions</div>
+            <div>Modules</div>
+            <div>APIs</div>
+            <div>Errors</div>
+            <div>Logging</div>
+            <div>Debugging</div>
+          </div>
+        </div>
+        <div class="ref-grid">
+          <div class="ref-grid-title">Practical Tips</div>
+          <div class="ref-grid-intro">
+            A few practical habits that make scripting easier to maintain.
+          </div>
+          <div class="ref-grid-table">
+            <div>Use clear names</div>
+            <div>Comment complex logic</div>
+            <div>Keep functions small</div>
+            <div>Test often</div>
+            <div>Handle errors</div>
+            <div>Log important steps</div>
+            <div>Use version control</div>
+            <div>Organise files</div>
+            <div>Refactor regularly</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SIGNUP -->
+      <section class="page" id="page-signup">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Sign up</div>
+            <div class="page-subtitle">
+              Create an account to simulate tracking your learning.
+            </div>
+          </div>
+        </div>
+        <div class="auth-wrapper">
+          <div class="auth-logo">
+            <img src="assets/images/logo_w2l.png" alt="W2L Logo" />
+          </div>
+          <div class="auth-title">Create your account</div>
+          <div class="auth-sub">
+            This form is a front-end mockup to show how a real platform would
+            collect user details.
+          </div>
+          <form class="auth-form">
+            <div>
+              <label for="signup-name">Full name</label>
+              <input id="signup-name" type="text" placeholder="Your name" />
+            </div>
+            <div>
+              <label for="signup-email">Email</label>
+              <input id="signup-email" type="email" placeholder="you@example.com" />
+            </div>
+            <div>
+              <label for="signup-password">Password</label>
+              <input id="signup-password" type="password" placeholder="••••••••" />
+            </div>
+            <div>
+              <label for="signup-confirm">Confirm password</label>
+              <input id="signup-confirm" type="password" placeholder="••••••••" />
+            </div>
+          </form>
+          <div class="auth-actions">
+            <button class="btn-primary" type="button">Sign up</button>
+            <span class="auth-footer-link" data-page="login">
+              Already have an account? Log in
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOGIN -->
+      <section class="page" id="page-login">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Log in</div>
+            <div class="page-subtitle">
+              Access your W2L Websites account (simulation).
+            </div>
+          </div>
+        </div>
+        <div class="auth-wrapper">
+          <div class="auth-logo">
+            <img src="assets/images/logo_w2l.png" alt="W2L Logo" />
+          </div>
+          <div class="auth-title">Welcome back</div>
+          <div class="auth-sub">
+            This login form is part of the simulation of a full learning
+            platform.
+          </div>
+          <form class="auth-form">
+            <div>
+              <label for="login-email">Email</label>
+              <input id="login-email" type="email" placeholder="you@example.com" />
+            </div>
+            <div>
+              <label for="login-password">Password</label>
+              <input id="login-password" type="password" placeholder="••••••••" />
+            </div>
+          </form>
+          <div class="auth-actions">
+            <button class="btn-primary" type="button">Log in</button>
+            <span class="auth-footer-link" data-page="signup">
+              Need an account? Sign up
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRIVACY -->
+      <section class="page" id="page-privacy">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Privacy Policy</div>
+            <div class="page-subtitle">
+              Example privacy page for the W2L Websites project.
+            </div>
+          </div>
+        </div>
+        <div class="legal-page">
+          <h2>Privacy Policy</h2>
+          <p>
+            This page is part of the college project and demonstrates how a
+            privacy policy could be presented on a real website. No real user
+            data is collected or stored in this version of W2L Websites.
+          </p>
+          <h3>Information Collection</h3>
+          <p>
+            The sign up and log in forms are front-end only and do not send
+            data to a server. They are included to show how forms and privacy
+            information would be integrated into a complete platform.
+          </p>
+          <h3>Use of Data</h3>
+          <p>
+            In a real application, this section would explain how user data is
+            used, stored and protected. For this project, it simply shows the
+            structure of such a page.
+          </p>
+          <h3>Contact</h3>
+          <p>
+            If this were a live platform, contact details or a support email
+            would be listed here for privacy-related questions.
+          </p>
+        </div>
+      </section>
+
+      <!-- TERMS -->
+      <section class="page" id="page-terms">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Terms and Conditions</div>
+            <div class="page-subtitle">
+              Example terms page for the W2L Websites project.
+            </div>
+          </div>
+        </div>
+        <div class="legal-page">
+          <h2>Terms and Conditions</h2>
+          <p>
+            These terms are an example for the college project and are not
+            legally binding. They show how a terms page could be integrated into
+            a learning platform.
+          </p>
+          <h3>Use of the Platform</h3>
+          <p>
+            W2L Websites is intended for educational purposes. Users are
+            expected to use the content to learn about web development and not
+            to misuse the platform.
+          </p>
+          <h3>Content Ownership</h3>
+          <p>
+            In a real platform, this section would describe who owns the
+            tutorials, references and design. Here, it simply demonstrates the
+            structure of such information.
+          </p>
+          <h3>Changes to the Terms</h3>
+          <p>
+            A real website would update this page when terms change. For this
+            project, it shows that the platform is designed with this in mind.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>All rights reserved © W2L Websites</div>
+      <div class="footer-links">
+        <span data-page="privacy">Privacy</span>
+        <span data-page="terms">Terms</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- SETTINGS PANEL -->
+  <div class="settings-panel-backdrop" id="settingsPanel">
+    <div class="settings-panel">
+      <div class="settings-panel-header">
+        <div class="settings-panel-title">Settings &amp; Navigation</div>
+        <button class="btn-icon" id="settingsClose">✖</button>
+      </div>
+      <div class="settings-row">
+        <span>Theme</span>
+        <span>Neon dark</span>
+      </div>
+      <div class="settings-row">
+        <span>Layout</span>
+        <span>Single-page app</span>
+      </div>
+      <div class="settings-row">
+        <span>Animations</span>
+        <span>Fade + slide</span>
+      </div>
+      <div class="settings-note">
+        This panel is a front-end mockup to show how settings and extra
+        navigation could be presented in a real application.
+      </div>
+
+      <div class="settings-nav">
+        <div class="settings-nav-title">Pages</div>
+        <div class="settings-link" data-page="menu">Main menu</div>
+        <div class="settings-link" data-page="about">About us</div>
+        <div class="settings-link" data-page="faq">FAQ</div>
+        <div class="settings-link" data-page="references">References</div>
+        <div class="settings-link" data-page="signup">Sign up</div>
+        <div class="settings-link" data-page="login">Log in</div>
+        <div class="settings-link" data-page="privacy">Privacy policy</div>
+        <div class="settings-link" data-page="terms">Terms &amp; conditions</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const pages = {
+      home: document.getElementById("page-home"),
+      menu: document.getElementById("page-menu"),
+      about: document.getElementById("page-about"),
+      faq: document.getElementById("page-faq"),
+      tutorials: document.getElementById("page-tutorials"),
+      tutorialSingle: document.getElementById("page-tutorial-single"),
+      references: document.getElementById("page-references"),
+      refHtml: document.getElementById("page-ref-html"),
+      refCss: document.getElementById("page-ref-css"),
+      refJs: document.getElementById("page-ref-js"),
+      refMysql: document.getElementById("page-ref-mysql"),
+      refScript: document.getElementById("page-ref-script"),
+      signup: document.getElementById("page-signup"),
+      login: document.getElementById("page-login"),
+      privacy: document.getElementById("page-privacy"),
+      terms: document.getElementById("page-terms"),
+    };
+
+    function showPage(key) {
+      Object.values(pages).forEach((p) => p.classList.remove("active"));
+      switch (key) {
+        case "home":
+          pages.home.classList.add("active");
+          break;
+        case "menu":
+          pages.menu.classList.add("active");
+          break;
+        case "about":
+          pages.about.classList.add("active");
+          break;
+        case "faq":
+          pages.faq.classList.add("active");
+          break;
+        case "tutorials":
+          pages.tutorials.classList.add("active");
+          break;
+        case "tutorialSingle":
+          pages.tutorialSingle.classList.add("active");
+          break;
+        case "references":
+          pages.references.classList.add("active");
+          break;
+        case "ref-html":
+          pages.refHtml.classList.add("active");
+          break;
+        case "ref-css":
+          pages.refCss.classList.add("active");
+          break;
+        case "ref-js":
+          pages.refJs.classList.add("active");
+          break;
+        case "ref-mysql":
+          pages.refMysql.classList.add("active");
+          break;
+        case "ref-script":
+          pages.refScript.classList.add("active");
+          break;
+        case "signup":
+          pages.signup.classList.add("active");
+          break;
+        case "login":
+          pages.login.classList.add("active");
+          break;
+        case "privacy":
+          pages.privacy.classList.add("active");
+          break;
+        case "terms":
+          pages.terms.classList.add("active");
+          break;
+        default:
+          pages.home.classList.add("active");
+      }
+
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.page === key);
+      });
+    }
+
+    const sidebar = document.getElementById("sidebar");
+    const sidebarToggle = document.getElementById("sidebarToggle");
+
+    function updateSidebarToggleIcon() {
+      if (window.innerWidth <= 720) {
+        sidebarToggle.textContent = sidebar.classList.contains("open")
+          ? "✖"
+          : "☰";
+      } else {
+        sidebarToggle.textContent = "☰";
+      }
+    }
+
+sidebarToggle.addEventListener("click", () => {
+  sidebar.classList.toggle("open");
+});
+
+    window.addEventListener("resize", updateSidebarToggleIcon);
+    updateSidebarToggleIcon();
+
+    document.addEventListener("click", (e) => {
+      const target = e.target.closest("[data-page]");
+      if (!target) return;
+      const pageKey = target.getAttribute("data-page");
+      showPage(pageKey);
+
+      if (window.innerWidth <= 720) {
+        sidebar.classList.remove("open");
+        updateSidebarToggleIcon();
+      }
+    });
+
+    document.querySelectorAll(".faq-item").forEach((item) => {
+      const q = item.querySelector(".faq-question");
+      q.addEventListener("click", () => {
+        item.classList.toggle("open");
+      });
+    });
+
+    const tutorialTitle = document.getElementById("tutorialTitle");
+    const tutorialSubtitle = document.getElementById("tutorialSubtitle");
+    const tutorialIntro = document.getElementById("tutorialIntro");
+    const tutorialDetails = document.getElementById("tutorialDetails");
+    const tutorialVideo = document.getElementById("tutorialVideo");
+
+    const tutorialContent = {
+      "Intro to HTML": {
+        subtitle: "Understand the basic structure of a web page.",
+        intro:
+          "In this tutorial, you learn how every HTML page is built: from the <!DOCTYPE> declaration to the <body> content. We look at headings, paragraphs, links and images.",
+        details:
+          "You will see how to create a simple but complete page that displays text and images in a structured way. This is the foundation for everything else you build on the web.",
+        video: "https://www.youtube.com/embed/dD2EISBDjWM",
+      },
+      "Basic CSS Layouts": {
+        subtitle: "Learn how to position and space elements.",
+        intro:
+          "This tutorial focuses on the most common layout properties: display, margin, padding and width. You will see how they affect the structure of your page.",
+        details:
+          "We build a simple card layout and discuss how spacing improves readability. This prepares you for more advanced layouts like flexbox and grid.",
+        video: "https://www.youtube.com/embed/1Rs2ND1ryYc",
+      },
+      "Responsive Design": {
+        subtitle: "Make your website look good on any device.",
+        intro:
+          "Here you learn what media queries are and how to use them to adapt your layout to different screen sizes.",
+        details:
+          "We talk about breakpoints, mobile-first design, and how to test your layout in the browser. By the end, you will understand the basic approach to responsive design.",
+        video: "https://www.youtube.com/embed/srvUrASNj0s",
+      },
+      "JavaScript Basics": {
+        subtitle: "Start writing logic with JavaScript.",
+        intro:
+          "This tutorial introduces variables, data types, and simple operations that control behaviour in your pages.",
+        details:
+          "You will write small scripts that change text on the page and perform basic calculations. This builds confidence before moving to DOM manipulation.",
+        video: "https://www.youtube.com/embed/W6NZfCO5SIk",
+      },
+      "DOM Manipulation": {
+        subtitle: "Change the page dynamically with JavaScript.",
+        intro:
+          "You learn how to select elements with document.querySelector and update their content or style.",
+        details:
+          "We also cover creating new elements and removing them. This is how interactive interfaces are built in modern websites.",
+        video: "https://www.youtube.com/embed/0ik6X4DJKCc",
+      },
+"Events & Forms": {
+  subtitle: "React to user actions like clicks and submissions.",
+  intro:
+    "This tutorial shows how to listen for events such as click, input and submit.",
+  details:
+    "You will validate simple forms and give feedback to the user. This is a key part of any interactive website.",
+  video: "https://www.youtube.com/embed/2O8pkybH6po",
+},
+      "Intro to MySQL": {
+        subtitle: "See how data is stored in tables.",
+        intro:
+          "We introduce the idea of databases, tables, rows and columns using MySQL as an example.",
+        details:
+          "You will understand how data is organised and why relational databases are useful for web applications.",
+        video: "https://www.youtube.com/embed/9ylj9NR0Lcg",
+      },
+      "Basic Queries": {
+        subtitle: "Write simple SQL commands.",
+        intro:
+          "This tutorial covers SELECT, INSERT, UPDATE and DELETE with small examples.",
+        details:
+          "You will see how to retrieve data, add new rows, modify existing ones and remove them when needed.",
+        video: "https://www.youtube.com/embed/9Pzj7Aj25lw",
+      },
+      "Connecting to Backend": {
+        subtitle: "Understand the concept of connecting a site to a database.",
+        intro:
+          "We explain at a high level how a website can send data to a server and receive responses.",
+        details:
+          "This is not a full backend implementation, but it shows the flow between front-end, server and database, so you understand the bigger picture.",
+        video: "https://www.youtube.com/embed/7YcW25PHnAA",
+      },
+    };
+
+    document.querySelectorAll(".tutorial-link").forEach((link) => {
+      link.addEventListener("click", () => {
+        const title = link.getAttribute("data-tutorial") || "Tutorial";
+        tutorialTitle.textContent = title;
+
+        const content = tutorialContent[title];
+        if (content) {
+          tutorialSubtitle.textContent = content.subtitle;
+          tutorialIntro.textContent = content.intro;
+          tutorialDetails.textContent = content.details;
+          tutorialVideo.src = content.video;
+        } else {
+          tutorialSubtitle.textContent =
+            "Video-based tutorial with supporting explanation.";
+          tutorialIntro.textContent =
+            "This section represents an individual tutorial page. It explains the topic in more detail and simulates how a real learning platform would present a lesson.";
+          tutorialDetails.textContent =
+            "Below the video, you can add notes, code snippets, and step-by-step explanations. This text changes depending on which tutorial you opened, so each lesson feels specific and not generic.";
+        }
+
+        showPage("tutorialSingle");
+      });
+    });
+
+    const heroImage = document.getElementById("heroImage");
+    const heroPrev = document.getElementById("heroPrev");
+    const heroNext = document.getElementById("heroNext");
+    const heroDots = document.querySelectorAll(".hero-dot");
+    const heroKicker = document.getElementById("heroKicker");
+    const heroTitle = document.getElementById("heroTitle");
+    const heroDesc = document.getElementById("heroDesc");
+
+    const heroSlides = [
+      {
+        img: "assets/images/hero_main.jpg",
+        kicker: "Start here",
+        title: "Your website starts here",
+        desc: "Learn how to plan, design and build a complete website from scratch, using the same structure as real platforms.",
+      },
+      {
+        img: "assets/images/feature_1.jpg",
+        kicker: "Step 1 · Learn",
+        title: "Learn the core languages",
+        desc: "HTML, CSS and JavaScript explained in a clear, structured way so you can build real pages.",
+      },
+      {
+        img: "assets/images/feature_2.jpg",
+        kicker: "Step 2 · Design",
+        title: "Design clean, modern layouts",
+        desc: "Use layout systems, spacing and typography to make your pages look professional on desktop and mobile.",
+      },
+      {
+        img: "assets/images/feature_3.jpg",
+        kicker: "Step 3 · Launch",
+        title: "Prepare your site for launch",
+        desc: "Understand hosting, domains and deployment so you can share your work with others.",
+      },
+      {
+        img: "assets/images/feature_4.jpg",
+        kicker: "Step 4 · Grow",
+        title: "Keep improving your skills",
+        desc: "Use references and FAQ as a quick support while you build more advanced projects.",
+      },
+    ];
+
+    let heroIndex = 0;
+
+    function updateHero() {
+      const slide = heroSlides[heroIndex];
+      heroImage.src = slide.img;
+      heroKicker.textContent = slide.kicker;
+      heroTitle.textContent = slide.title;
+      heroDesc.textContent = slide.desc;
+      heroDots.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === heroIndex);
+      });
+    }
+
+    heroPrev.addEventListener("click", () => {
+      heroIndex = (heroIndex - 1 + heroSlides.length) % heroSlides.length;
+      updateHero();
+    });
+
+    heroNext.addEventListener("click", () => {
+      heroIndex = (heroIndex + 1) % heroSlides.length;
+      updateHero();
+    });
+
+    heroDots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        heroIndex = parseInt(dot.getAttribute("data-idx"), 10);
+        updateHero();
+      });
+    });
+
+    const settingsBtn = document.getElementById("settingsBtn");
+    const settingsPanel = document.getElementById("settingsPanel");
+    const settingsClose = document.getElementById("settingsClose");
+
+    settingsBtn.addEventListener("click", () => {
+      settingsPanel.classList.add("open");
+    });
+
+    settingsClose.addEventListener("click", () => {
+      settingsPanel.classList.remove("open");
+    });
+
+    settingsPanel.addEventListener("click", (e) => {
+      if (e.target === settingsPanel) {
+        settingsPanel.classList.remove("open");
+      }
+    });
+
+    showPage("home");
+    updateHero();
+  </script>
+</body>
+</html>
